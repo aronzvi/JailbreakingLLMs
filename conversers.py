@@ -1,6 +1,6 @@
 
 import common
-from language_models import GPT, Claude, PaLM, HuggingFace
+from language_models import GPT, Claude, PaLM, HuggingFace, KnosticGwGpt
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from config import VICUNA_PATH, LLAMA_PATH, ATTACK_TEMP, TARGET_TEMP, ATTACK_TOP_P, TARGET_TOP_P   
@@ -173,6 +173,8 @@ def load_indiv_model(model_name, device=None):
     model_path, template = get_model_path_and_template(model_name)
     if model_name in ["gpt-3.5-turbo", "gpt-4"]:
         lm = GPT(model_name)
+    elif model_name in ["knostic-gw-gpt-4", "knostic-gw-gpt-3.5-turbo"]:
+        lm = KnosticGwGpt(model_name.split("knostic-gw-")[1])
     elif model_name in ["claude-2", "claude-instant-1"]:
         lm = Claude(model_name)
     elif model_name in ["palm-2"]:
@@ -208,6 +210,14 @@ def get_model_path_and_template(model_name):
             "template":"gpt-4"
         },
         "gpt-3.5-turbo": {
+            "path":"gpt-3.5-turbo",
+            "template":"gpt-3.5-turbo"
+        },
+        "knostic-gw-gpt-4":{
+            "path":"gpt-4",
+            "template":"gpt-4"
+        },
+        "knostic-gw-gpt-3.5-turbo":{
             "path":"gpt-3.5-turbo",
             "template":"gpt-3.5-turbo"
         },

@@ -7,6 +7,7 @@ import torch
 import gc
 from typing import Dict, List
 import google.generativeai as palm
+import config
 
 
 class LanguageModel:
@@ -134,7 +135,16 @@ class GPT(LanguageModel):
             self.generate(conv, max_n_tokens, temperature, top_p) for conv in convs_list
         ]
 
+class KnosticGwGpt(GPT):
+    def __init__(self, model_name):
+        self.model_name = model_name
+        self.client = OpenAI(
+            api_key=os.getenv("OPENAI_API_KEY"),
+            base_url=config.KNOSTIC_URL,
+            default_headers={"x-knostic-api-key": os.getenv("KNOSTIC_API_KEY")},
+        )
 
+    
 class Claude:
     API_RETRY_SLEEP = 10
     API_ERROR_OUTPUT = "$ERROR$"
